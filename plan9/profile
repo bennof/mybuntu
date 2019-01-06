@@ -1,0 +1,11 @@
+PLAN9=~/plan9port export PLAN9
+PATH=PATH:$PLAN9/bin export PATH
+PATH=PATH:~/.bin
+if [ ! pgrep fontsrv ]; then
+    fontsrv &
+fi
+
+if [ ! pgrep plumber ]; then
+    plumber &
+fi
+alias acme="acme -a -f /mnt/font/'Lato Regular'/13a/font"
