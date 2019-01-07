@@ -3,8 +3,18 @@
 #
 
 
-all:
-	@echo "all"
+all: help
+
+include .mk/common.mk
+
+
+
+
+
+help:
+	@echo "Help:"
+
+
 
 clean:
 	@echo "clean"
@@ -16,11 +26,4 @@ setup:
 	@echo "setup"
 
 
-test: 
-	cat <<- EOF > test.hh
-		some test
-		some more
-	EOF	
 
-
-include .mk/common.mk
