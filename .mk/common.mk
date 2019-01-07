@@ -1,16 +1,26 @@
 # Common Makefile 
 #
 
-VERSION := $(shell uname -v)
-ifneq (,$(findstring Microsoft,$(VERSION)))
+UNAME := $(shell uname -v)
+ifneq (,$(findstring Microsoft,$(UNAME)))
 	OS := "Windows"
 else
-	ifneq (,$(findstring Ubuntu,$(VERSION)))
+	ifneq (,$(findstring Ubuntu,$(UNAME)))
 		OS := "Ubuntu"
 	else 
-		OS := "Linux"
+		LSB_RELEASE := $(shell lsb_release -i)
+		ifneq (,$(findstring Debian,$(LSB_RELEASE)))
+			OS := "Debian"
+		else
+			ifneq (,$(findstring Raspbian,$(LSB_RELEASE)))
+				OS := "Raspbian"
+			else
+				OS := "Linux"
+			endif
+		endif
 	endif
 endif
+ARCH := $(shell uname -m)
 
 MAKEFILES := $(wildcard */Makefile)
 MAKES     := $(subst Makefile,.make,$(MAKEFILES))
@@ -25,8 +35,8 @@ DIRS      := $(subst /Makefile,,$(MAKEFILES))
 
 %.sysinfo: 
 	@echo "System Info:"	
-	@echo "Version:   $(VERSION)"
 	@echo "OS:        $(OS)"
+	@echo "Arch:      $(ARCH)"
 	@echo "Makefiles: $(MAKEFILES)"
 	@echo "Makes:     $(MAKES)"
 

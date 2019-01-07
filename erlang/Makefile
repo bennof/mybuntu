@@ -3,14 +3,18 @@
 
 all:
 
-install: erlang-solutions_1.0_all.deb
+install: erlang-solutions_1.0_all.deb apt rebar3
+
+apt:
 	sudo dpkg -i erlang-solutions_1.0_all.deb
 	sudo apt-get update
-	sudo apt-get -y install esl-erlang
+	if [ $(OS) = "Raspbian" ] ; then \
+		sudo apt-get -y install erlang;  else \
+		sudo apt-get -y install esl-erlang; fi
 
 clean:
 	rm -f erlang-solutions_1.0_all.deb
-	rm -f rebar3
+	rm -rf rebar3
 
 include ../.mk/common.mk
 
@@ -22,3 +26,4 @@ rebar3:
 	cd rebar3; ./bootstrap
 	mkdir -p ~/.bin
 	install -m 755 rebar3/rebar3 ~/.bin/rebar3
+	test -z $$(grep -n "PATH=\$PATH:~/\.bin" ~/.profile); if [ $$? = 0 ] ; then echo "PATH=\$PATH:~/.bin" >> ~/.profile; fi
